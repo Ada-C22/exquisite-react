@@ -6,6 +6,8 @@ import RecentSubmission from './RecentSubmission';
 
 const buildLine = (formData, fields) => {
   const line = fields.map((field) => {
+    field.getStringRepresentation(formData);
+
     if (field.key) {
       return formData[field.key];
     } else {
@@ -27,6 +29,11 @@ const Game = () => {
 
   const handleRevealPoem = () => {
     setDone(true);
+  };
+
+  const handleRestart = () => {
+    setLines([]);
+    setDone(false);
   };
 
   // const mostRecentSubmission = lines[lines.length - 1];
@@ -65,7 +72,23 @@ const Game = () => {
 
       {
         !done &&
-        <PlayerSubmissionForm index={lines.length + 1} sendSubmission={handleSubmission} />
+        <PlayerSubmissionForm
+          index={lines.length + 1}
+          sendSubmission={handleSubmission}
+          fields={FIELDS}
+        />
+      }
+
+      {
+        done &&
+        <div className='Game__restart-btn-container'>
+          <button
+            className='Game__restart-btn'
+            onClick={handleRestart}
+          >
+            Restart
+          </button>
+        </div>
       }
 
       <FinalPoem isSubmitted={done} submissions={lines} revealPoem={handleRevealPoem} />
